@@ -1,0 +1,17 @@
+[workspace]
+resolver = "2"
+members = ["arxiv-tools"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["akitenkrad"]
+description = ""
+repository = ""
+license = "MIT/Apache-2.0"
+
+[workspace.dependencies]
+anyhow = "1.0.94"
+
+[workspace.metadata.release]
+tag-prefix = ""
