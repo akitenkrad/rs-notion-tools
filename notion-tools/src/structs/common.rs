@@ -181,7 +181,6 @@ impl Parent {
             ParentType::Page => return Parent::page(parent_id),
             ParentType::Workspace => return Parent::workspace(parent_id),
             ParentType::Block => return Parent::block(parent_id),
-            _ => return Parent::default(),
         }
     }
 }

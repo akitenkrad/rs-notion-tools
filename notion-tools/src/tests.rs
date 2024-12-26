@@ -1,8 +1,6 @@
-use super::structs::common::*;
 use super::structs::database_properties::*;
 use super::*;
 use fxhash::FxHashMap;
-use structs::block;
 
 #[tokio::test]
 async fn test_retrieve_database() {

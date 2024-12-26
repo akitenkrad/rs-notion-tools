@@ -140,7 +140,6 @@ impl Notion {
                 page.parent.type_name = parent_type;
                 page.parent.block_id = Some(parent_id.to_string());
             }
-            _ => {}
         }
         let page = self.update_a_page(page_id, &page).await?;
         return Ok(page);
