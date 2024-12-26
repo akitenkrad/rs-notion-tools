@@ -1,50 +1,11 @@
-use core::str;
-
+use crate::structs::common::*;
 use fxhash::FxHashMap;
 use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct User {
-    #[serde(default = "String::new")]
-    pub object: String,
-    #[serde(default = "String::new")]
-    pub id: String,
-    #[serde(default = "String::new")]
-    pub name: String,
-    #[serde(default = "Option::default")]
-    pub avatar_url: Option<String>,
-    #[serde(rename = "type", default = "String::new")]
-    pub type_name: String,
-    #[serde(default = "Email::default")]
-    pub person: Email,
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Date {
     #[serde(default = "String::new")]
     pub start: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct Email {
-    #[serde(default = "String::new")]
-    pub email: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct ExternalUrl {
-    #[serde(default = "String::new")]
-    pub url: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct File {
-    #[serde(default = "String::new")]
-    pub name: String,
-    #[serde(rename = "type", default = "String::new")]
-    pub type_name: String,
-    #[serde(default = "ExternalUrl::default")]
-    pub external: ExternalUrl,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -71,113 +32,6 @@ pub struct PhoneNumber {
 pub struct Relation {
     #[serde(default = "String::new")]
     pub id: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct TextObject {
-    #[serde(default = "String::new")]
-    pub content: String,
-    #[serde(default = "Option::default")]
-    pub link: Option<String>,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AnnotationObject {
-    #[serde(default = "bool::default")]
-    pub bold: bool,
-    #[serde(default = "bool::default")]
-    pub italic: bool,
-    #[serde(default = "bool::default")]
-    pub strikethrough: bool,
-    #[serde(default = "bool::default")]
-    pub underline: bool,
-    #[serde(default = "bool::default")]
-    pub code: bool,
-    #[serde(default = "String::new")]
-    pub color: String,
-}
-
-impl Default for AnnotationObject {
-    fn default() -> Self {
-        let annotation = AnnotationObject {
-            bold: false,
-            italic: false,
-            strikethrough: false,
-            underline: false,
-            code: false,
-            color: "default".to_string(),
-        };
-        return annotation;
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RichText {
-    #[serde(rename = "type", default = "String::new")]
-    pub type_name: String,
-    #[serde(default = "TextObject::default")]
-    pub text: TextObject,
-    #[serde(default = "AnnotationObject::default")]
-    pub annotations: AnnotationObject,
-    #[serde(default = "String::new")]
-    pub plain_text: String,
-    #[serde(default = "Option::default")]
-    pub href: Option<String>,
-}
-
-impl Default for RichText {
-    fn default() -> Self {
-        let mut text = TextObject::default();
-        text.content = "".to_string();
-        let annotations = AnnotationObject::default();
-        let rich_text = RichText {
-            type_name: "text".to_string(),
-            text,
-            annotations,
-            plain_text: "".to_string(),
-            href: None,
-        };
-        return rich_text;
-    }
-}
-
-impl RichText {
-    pub fn from_str(value: &str) -> Self {
-        let mut text = TextObject::default();
-        text.content = value.to_string();
-        let annotations = AnnotationObject::default();
-        let mut rich_text = RichText::default();
-        rich_text.type_name = "text".to_string();
-        rich_text.text = text;
-        rich_text.annotations = annotations;
-        rich_text.plain_text = value.to_string();
-        return rich_text;
-    }
-
-    pub fn from_str_with_annotations(
-        value: &str,
-        bold: bool,
-        italic: bool,
-        underline: bool,
-        strikethrough: bool,
-        code: bool,
-        color: String,
-    ) -> Self {
-        let mut text = TextObject::default();
-        text.content = value.to_string();
-        let annotations = AnnotationObject {
-            bold,
-            italic,
-            underline,
-            strikethrough,
-            code,
-            color,
-        };
-        let mut rich_text = RichText::default();
-        rich_text.text = text;
-        rich_text.annotations = annotations;
-        return rich_text;
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -224,8 +78,8 @@ pub struct SelectOption {
     pub id: String,
     #[serde(default = "String::new")]
     pub name: String,
-    #[serde(default = "String::new", skip_serializing)]
-    pub color: String,
+    #[serde(default = "Color::default", skip_serializing)]
+    pub color: Color,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -507,7 +361,7 @@ impl DatabaseProperty {
             options.push(SelectOption {
                 id: "".to_string(),
                 name: v.to_string(),
-                color: "".to_string(),
+                color: Color::Default,
             });
         });
         prop.multi_select = Some(options);
@@ -549,7 +403,7 @@ impl DatabaseProperty {
         prop.select = Some(SelectOption {
             id: "".to_string(),
             name: value.to_string(),
-            color: "".to_string(),
+            color: Color::Default,
         });
         return prop;
     }
@@ -559,7 +413,7 @@ impl DatabaseProperty {
         prop.status = Some(SelectOption {
             id: "".to_string(),
             name: value.to_string(),
-            color: "".to_string(),
+            color: Color::Default,
         });
         return prop;
     }
