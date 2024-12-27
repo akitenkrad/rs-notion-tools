@@ -6,12 +6,12 @@ members = ["notion-tools"]
 version = "0.1.0"
 edition = "2021"
 authors = ["akitenkrad"]
-description = ""
-repository = ""
+description = "Notion API tools"
+repository = "https://github.com/akitenkrad/rs-notion-tools.git"
 license = "MIT/Apache-2.0"
 
 [workspace.dependencies]
-anyhow = "1.0.94"
+anyhow = "1.0.95"
 
 [workspace.metadata.release]
 tag-prefix = ""
