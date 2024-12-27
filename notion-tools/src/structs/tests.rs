@@ -1,18 +1,15 @@
-use super::database_filter::*;
+use super::query_filter::FilterItem as DFItems;
+use super::query_filter::*;
 
-use super::database_filter::DatabaseFilterItems as DFItems;
 #[test]
-fn test_build_database_filter() {
-    let mut filter = DatabaseFilter::new();
+fn test_build_query_filter() {
+    let mut filter = QueryFilter::new();
     filter.or(vec![
-        DFItems::checkbox("Property 1", CheckboxFilterItem::default().equals()),
-        DFItems::date("Property 2", DateFilterItem::default().equals("2024-12-20")),
+        DFItems::checkbox("Property 1", CheckboxFilterItem::equals()),
+        DFItems::date("Property 2", DateFilterItem::equals("2024-12-20")),
         DFItems::and(vec![
-            DFItems::select("Property 3", SelectFilterItem::default().equals("Option 1")),
-            DFItems::rich_text(
-                "Property 4",
-                RichTextFilterItem::default().contains("Sample Text"),
-            ),
+            DFItems::select("Property 3", SelectFilterItem::equals("Option 1")),
+            DFItems::rich_text("Property 4", RichTextFilterItem::contains("Sample Text")),
         ]),
     ]);
 

@@ -753,6 +753,20 @@ impl Block {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct BlockResponse {
+    #[serde(default = "String::new")]
+    pub object: String,
+    #[serde(default = "u32::default", skip_serializing)]
+    pub status: u32,
+    #[serde(default = "String::new", skip_serializing)]
+    pub code: String,
+    #[serde(default = "String::new", skip_serializing)]
+    pub message: String,
+    #[serde(default = "Vec::new")]
+    pub results: Vec<Block>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct BlockBody {
     #[serde(default = "Vec::default")]
     pub children: Vec<Block>,

@@ -1,3 +1,32 @@
+//! # Query Filter
+//!
+//! ## Build a query filter
+//!
+//! - Simple filter
+//! A simple filter is a filter that has only one condition, `Status=="ToDo"`.
+//!
+//! ```rust
+//! # use notion_tools::structs::query_filter::*;
+//! let mut query_filter = QueryFilter::new();
+//! query_filter.args(FilterItem::status("Status", StatusFilterItem::equals("ToDo")));
+//! let filter = query_filter.build();
+//! ```
+//!
+//! - Use `and` and `or` to combine multiple filters
+//!
+//! ```rust
+//! # use notion_tools::structs::query_filter::*;
+//! let mut query_filter = QueryFilter::new();
+//! query_filter.and(vec![
+//!    FilterItem::status("Status", StatusFilterItem::equals("Active")),
+//!    FilterItem::rich_text("Name", RichTextFilterItem::contains("Zack")),
+//!    FilterItem::or(vec![
+//!       FilterItem::number("Age", NumberFilterItem::greater_than(18)),
+//!       FilterItem::rich_text("Address", RichTextFilterItem::contains("New York")),
+//!    ])
+//! ]);
+//! let filter = query_filter.build();
+//! ```
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -9,14 +38,18 @@ pub struct CheckboxFilterItem {
 }
 
 impl CheckboxFilterItem {
-    pub fn equals(&mut self) -> CheckboxFilterItem {
-        self.equals = Some(true);
-        self.clone()
+    pub fn equals() -> Self {
+        CheckboxFilterItem {
+            equals: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equal(&mut self) -> CheckboxFilterItem {
-        self.does_not_equal = Some(true);
-        self.clone()
+    pub fn does_not_equal() -> Self {
+        CheckboxFilterItem {
+            does_not_equal: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -39,39 +72,53 @@ pub struct DateFilterItem {
 }
 
 impl DateFilterItem {
-    pub fn equals(&mut self, value: &str) -> DateFilterItem {
-        self.equals = Some(value.to_string());
-        self.clone()
+    pub fn equals(value: &str) -> Self {
+        DateFilterItem {
+            equals: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn after(&mut self, value: &str) -> DateFilterItem {
-        self.after = Some(value.to_string());
-        self.clone()
+    pub fn after(value: &str) -> Self {
+        DateFilterItem {
+            after: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn before(&mut self, value: &str) -> DateFilterItem {
-        self.before = Some(value.to_string());
-        self.clone()
+    pub fn before(value: &str) -> Self {
+        DateFilterItem {
+            before: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> DateFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        DateFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> DateFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        DateFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn on_or_after(&mut self, value: &str) -> DateFilterItem {
-        self.on_or_after = Some(value.to_string());
-        self.clone()
+    pub fn on_or_after(value: &str) -> Self {
+        DateFilterItem {
+            on_or_after: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn on_or_before(&mut self, value: &str) -> DateFilterItem {
-        self.on_or_before = Some(value.to_string());
-        self.clone()
+    pub fn on_or_before(value: &str) -> Self {
+        DateFilterItem {
+            on_or_before: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 }
 
@@ -84,14 +131,18 @@ pub struct FilesFilterItem {
 }
 
 impl FilesFilterItem {
-    pub fn is_empty(&mut self) -> FilesFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        FilesFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> FilesFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        FilesFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -108,24 +159,32 @@ pub struct FormulaFilterItem {
 }
 
 impl FormulaFilterItem {
-    pub fn checkbox(&mut self, item: CheckboxFilterItem) -> FormulaFilterItem {
-        self.checkbox = Some(item);
-        self.clone()
+    pub fn checkbox(item: CheckboxFilterItem) -> Self {
+        FormulaFilterItem {
+            checkbox: Some(item),
+            ..Default::default()
+        }
     }
 
-    pub fn date(&mut self, item: DateFilterItem) -> FormulaFilterItem {
-        self.date = Some(item);
-        self.clone()
+    pub fn date(item: DateFilterItem) -> Self {
+        FormulaFilterItem {
+            date: Some(item),
+            ..Default::default()
+        }
     }
 
-    pub fn number(&mut self, item: NumberFilterItem) -> FormulaFilterItem {
-        self.number = Some(item);
-        self.clone()
+    pub fn number(item: NumberFilterItem) -> Self {
+        FormulaFilterItem {
+            number: Some(item),
+            ..Default::default()
+        }
     }
 
-    pub fn string(&mut self, item: RichTextFilterItem) -> FormulaFilterItem {
-        self.string = Some(item);
-        self.clone()
+    pub fn string(item: RichTextFilterItem) -> Self {
+        FormulaFilterItem {
+            string: Some(item),
+            ..Default::default()
+        }
     }
 }
 
@@ -142,24 +201,32 @@ pub struct MultiSelectFilterItem {
 }
 
 impl MultiSelectFilterItem {
-    pub fn contains(&mut self, value: &str) -> MultiSelectFilterItem {
-        self.contains = Some(value.to_string());
-        self.clone()
+    pub fn contains(value: &str) -> Self {
+        MultiSelectFilterItem {
+            contains: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_contain(&mut self, value: &str) -> MultiSelectFilterItem {
-        self.does_not_contain = Some(value.to_string());
-        self.clone()
+    pub fn does_not_contain(value: &str) -> Self {
+        MultiSelectFilterItem {
+            does_not_contain: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn equals(&mut self) -> MultiSelectFilterItem {
-        self.equals = Some(true);
-        self.clone()
+    pub fn equals() -> Self {
+        MultiSelectFilterItem {
+            equals: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equal(&mut self) -> MultiSelectFilterItem {
-        self.does_not_equal = Some(true);
-        self.clone()
+    pub fn does_not_equal() -> Self {
+        MultiSelectFilterItem {
+            does_not_equal: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -184,44 +251,60 @@ pub struct NumberFilterItem {
 }
 
 impl NumberFilterItem {
-    pub fn equals(&mut self, value: u128) -> NumberFilterItem {
-        self.equals = Some(value);
-        self.clone()
+    pub fn equals(value: u128) -> Self {
+        NumberFilterItem {
+            equals: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equal(&mut self, value: u128) -> NumberFilterItem {
-        self.does_not_equal = Some(value);
-        self.clone()
+    pub fn does_not_equal(value: u128) -> Self {
+        NumberFilterItem {
+            does_not_equal: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn greater_than(&mut self, value: u128) -> NumberFilterItem {
-        self.greater_than = Some(value);
-        self.clone()
+    pub fn greater_than(value: u128) -> Self {
+        NumberFilterItem {
+            greater_than: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn less_than(&mut self, value: u128) -> NumberFilterItem {
-        self.less_than = Some(value);
-        self.clone()
+    pub fn less_than(value: u128) -> Self {
+        NumberFilterItem {
+            less_than: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn greater_than_or_equal_to(&mut self, value: u128) -> NumberFilterItem {
-        self.greater_than_or_equal_to = Some(value);
-        self.clone()
+    pub fn greater_than_or_equal_to(value: u128) -> Self {
+        NumberFilterItem {
+            greater_than_or_equal_to: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn less_than_or_equal_to(&mut self, value: u128) -> NumberFilterItem {
-        self.less_than_or_equal_to = Some(value);
-        self.clone()
+    pub fn less_than_or_equal_to(value: u128) -> Self {
+        NumberFilterItem {
+            less_than_or_equal_to: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> NumberFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        NumberFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> NumberFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        NumberFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -238,24 +321,32 @@ pub struct PeopleFilterItem {
 }
 
 impl PeopleFilterItem {
-    pub fn contains(&mut self, value: &str) -> PeopleFilterItem {
-        self.contains = Some(value.to_string());
-        self.clone()
+    pub fn contains(value: &str) -> Self {
+        PeopleFilterItem {
+            contains: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_contain(&mut self, value: &str) -> PeopleFilterItem {
-        self.does_not_contain = Some(value.to_string());
-        self.clone()
+    pub fn does_not_contain(value: &str) -> Self {
+        PeopleFilterItem {
+            does_not_contain: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> PeopleFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        PeopleFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> PeopleFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        PeopleFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -272,24 +363,32 @@ pub struct RelationFilterItem {
 }
 
 impl RelationFilterItem {
-    pub fn contains(&mut self, value: &str) -> RelationFilterItem {
-        self.contains = Some(value.to_string());
-        self.clone()
+    pub fn contains(value: &str) -> Self {
+        RelationFilterItem {
+            contains: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_contain(&mut self, value: &str) -> RelationFilterItem {
-        self.does_not_contain = Some(value.to_string());
-        self.clone()
+    pub fn does_not_contain(value: &str) -> Self {
+        RelationFilterItem {
+            does_not_contain: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> RelationFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        RelationFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> RelationFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        RelationFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -314,44 +413,60 @@ pub struct RichTextFilterItem {
 }
 
 impl RichTextFilterItem {
-    pub fn contains(&mut self, value: &str) -> RichTextFilterItem {
-        self.contains = Some(value.to_string());
-        self.clone()
+    pub fn contains(value: &str) -> Self {
+        RichTextFilterItem {
+            contains: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_contain(&mut self, value: &str) -> RichTextFilterItem {
-        self.does_not_contain = Some(value.to_string());
-        self.clone()
+    pub fn does_not_contain(value: &str) -> Self {
+        RichTextFilterItem {
+            does_not_contain: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn equals(&mut self, value: &str) -> RichTextFilterItem {
-        self.equals = Some(value.to_string());
-        self.clone()
+    pub fn equals(value: &str) -> Self {
+        RichTextFilterItem {
+            equals: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equal(&mut self, value: &str) -> RichTextFilterItem {
-        self.does_not_equal = Some(value.to_string());
-        self.clone()
+    pub fn does_not_equal(value: &str) -> Self {
+        RichTextFilterItem {
+            does_not_equal: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn starts_with(&mut self, value: &str) -> RichTextFilterItem {
-        self.starts_with = Some(value.to_string());
-        self.clone()
+    pub fn starts_with(value: &str) -> Self {
+        RichTextFilterItem {
+            starts_with: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn ends_with(&mut self, value: &str) -> RichTextFilterItem {
-        self.ends_with = Some(value.to_string());
-        self.clone()
+    pub fn ends_with(value: &str) -> Self {
+        RichTextFilterItem {
+            ends_with: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> RichTextFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        RichTextFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> RichTextFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        RichTextFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -368,24 +483,32 @@ pub struct SelectFilterItem {
 }
 
 impl SelectFilterItem {
-    pub fn equals(&mut self, value: &str) -> SelectFilterItem {
-        self.equals = Some(value.to_string());
-        self.clone()
+    pub fn equals(value: &str) -> Self {
+        SelectFilterItem {
+            equals: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equals(&mut self, value: &str) -> SelectFilterItem {
-        self.does_not_equals = Some(value.to_string());
-        self.clone()
+    pub fn does_not_equals(value: &str) -> Self {
+        SelectFilterItem {
+            does_not_equals: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> SelectFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        SelectFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> SelectFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        SelectFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -402,24 +525,32 @@ pub struct StatusFilterItem {
 }
 
 impl StatusFilterItem {
-    pub fn equals(&mut self, value: &str) -> StatusFilterItem {
-        self.equals = Some(value.to_string());
-        self.clone()
+    pub fn equals(value: &str) -> Self {
+        StatusFilterItem {
+            equals: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equals(&mut self, value: &str) -> StatusFilterItem {
-        self.does_not_equals = Some(value.to_string());
-        self.clone()
+    pub fn does_not_equals(value: &str) -> Self {
+        StatusFilterItem {
+            does_not_equals: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn is_empty(&mut self) -> StatusFilterItem {
-        self.is_empty = Some(true);
-        self.clone()
+    pub fn is_empty() -> Self {
+        StatusFilterItem {
+            is_empty: Some(true),
+            ..Default::default()
+        }
     }
 
-    pub fn is_not_empty(&mut self) -> StatusFilterItem {
-        self.is_not_empty = Some(true);
-        self.clone()
+    pub fn is_not_empty() -> Self {
+        StatusFilterItem {
+            is_not_empty: Some(true),
+            ..Default::default()
+        }
     }
 }
 
@@ -434,19 +565,25 @@ pub struct TimestampFilterItem {
 }
 
 impl TimestampFilterItem {
-    pub fn timestamp(&mut self, value: &str) -> TimestampFilterItem {
-        self.timestamp = Some(value.to_string());
-        self.clone()
+    pub fn timestamp(value: &str) -> Self {
+        TimestampFilterItem {
+            timestamp: Some(value.to_string()),
+            ..Default::default()
+        }
     }
 
-    pub fn created_time(&mut self, item: DateFilterItem) -> TimestampFilterItem {
-        self.created_time = Some(item);
-        self.clone()
+    pub fn created_time(item: DateFilterItem) -> Self {
+        TimestampFilterItem {
+            created_time: Some(item),
+            ..Default::default()
+        }
     }
 
-    pub fn last_edited_time(&mut self, item: DateFilterItem) -> TimestampFilterItem {
-        self.last_edited_time = Some(item);
-        self.clone()
+    pub fn last_edited_time(item: DateFilterItem) -> Self {
+        TimestampFilterItem {
+            last_edited_time: Some(item),
+            ..Default::default()
+        }
     }
 }
 
@@ -467,45 +604,57 @@ pub struct IdFilterItem {
 }
 
 impl IdFilterItem {
-    pub fn equals(&mut self, value: u128) -> IdFilterItem {
-        self.equals = Some(value);
-        self.clone()
+    pub fn equals(value: u128) -> Self {
+        IdFilterItem {
+            equals: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn does_not_equal(&mut self, value: u128) -> IdFilterItem {
-        self.does_not_equal = Some(value);
-        self.clone()
+    pub fn does_not_equal(value: u128) -> Self {
+        IdFilterItem {
+            does_not_equal: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn greater_than(&mut self, value: u128) -> IdFilterItem {
-        self.greater_than = Some(value);
-        self.clone()
+    pub fn greater_than(value: u128) -> Self {
+        IdFilterItem {
+            greater_than: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn less_than(&mut self, value: u128) -> IdFilterItem {
-        self.less_than = Some(value);
-        self.clone()
+    pub fn less_than(value: u128) -> Self {
+        IdFilterItem {
+            less_than: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn greater_than_or_equal_to(&mut self, value: u128) -> IdFilterItem {
-        self.greater_than_or_equal_to = Some(value);
-        self.clone()
+    pub fn greater_than_or_equal_to(value: u128) -> Self {
+        IdFilterItem {
+            greater_than_or_equal_to: Some(value),
+            ..Default::default()
+        }
     }
 
-    pub fn less_than_or_equal_to(&mut self, value: u128) -> IdFilterItem {
-        self.less_than_or_equal_to = Some(value);
-        self.clone()
+    pub fn less_than_or_equal_to(value: u128) -> Self {
+        IdFilterItem {
+            less_than_or_equal_to: Some(value),
+            ..Default::default()
+        }
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
-pub struct DatabaseFilterItems {
+pub struct FilterItem {
     #[serde(default = "String::new", skip_serializing_if = "String::is_empty")]
     pub property: String,
     #[serde(default = "Option::default", skip_serializing_if = "Option::is_none")]
-    pub and: Option<Vec<DatabaseFilterItems>>,
+    pub and: Option<Vec<FilterItem>>,
     #[serde(default = "Option::default", skip_serializing_if = "Option::is_none")]
-    pub or: Option<Vec<DatabaseFilterItems>>,
+    pub or: Option<Vec<FilterItem>>,
     #[serde(default = "Option::default", skip_serializing_if = "Option::is_none")]
     pub checkbox: Option<CheckboxFilterItem>,
     #[serde(default = "Option::default", skip_serializing_if = "Option::is_none")]
@@ -534,23 +683,23 @@ pub struct DatabaseFilterItems {
     pub id: Option<IdFilterItem>,
 }
 
-impl DatabaseFilterItems {
-    pub fn and(items: Vec<DatabaseFilterItems>) -> Self {
-        DatabaseFilterItems {
+impl FilterItem {
+    pub fn and(items: Vec<FilterItem>) -> Self {
+        FilterItem {
             and: Some(items),
             ..Default::default()
         }
     }
 
-    pub fn or(items: Vec<DatabaseFilterItems>) -> Self {
-        DatabaseFilterItems {
+    pub fn or(items: Vec<FilterItem>) -> Self {
+        FilterItem {
             or: Some(items),
             ..Default::default()
         }
     }
 
     pub fn checkbox(property: &str, item: CheckboxFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             checkbox: Some(item),
             ..Default::default()
@@ -558,7 +707,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn date(property: &str, item: DateFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             date: Some(item),
             ..Default::default()
@@ -566,7 +715,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn files(property: &str, item: FilesFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             files: Some(item),
             ..Default::default()
@@ -574,7 +723,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn formula(property: &str, item: FormulaFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             formula: Some(item),
             ..Default::default()
@@ -582,7 +731,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn multi_select(property: &str, item: MultiSelectFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             multi_select: Some(item),
             ..Default::default()
@@ -590,7 +739,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn number(property: &str, item: NumberFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             number: Some(item),
             ..Default::default()
@@ -598,7 +747,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn people(property: &str, item: PeopleFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             people: Some(item),
             ..Default::default()
@@ -606,7 +755,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn relation(property: &str, item: RelationFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             relation: Some(item),
             ..Default::default()
@@ -614,7 +763,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn rich_text(property: &str, item: RichTextFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             rich_text: Some(item),
             ..Default::default()
@@ -622,7 +771,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn select(property: &str, item: SelectFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             select: Some(item),
             ..Default::default()
@@ -630,7 +779,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn status(property: &str, item: StatusFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             status: Some(item),
             ..Default::default()
@@ -638,7 +787,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn timestamp(property: &str, item: TimestampFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             timestamp: Some(item),
             ..Default::default()
@@ -646,7 +795,7 @@ impl DatabaseFilterItems {
     }
 
     pub fn id(property: &str, item: IdFilterItem) -> Self {
-        DatabaseFilterItems {
+        FilterItem {
             property: property.to_string(),
             id: Some(item),
             ..Default::default()
@@ -655,26 +804,26 @@ impl DatabaseFilterItems {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DatabaseFilter {
-    pub filter: DatabaseFilterItems,
+pub struct QueryFilter {
+    pub filter: FilterItem,
 }
 
-impl DatabaseFilter {
+impl QueryFilter {
     pub fn new() -> Self {
-        DatabaseFilter {
-            filter: DatabaseFilterItems::default(),
+        QueryFilter {
+            filter: FilterItem::default(),
         }
     }
 
-    pub fn args(&mut self, item: DatabaseFilterItems) {
+    pub fn args(&mut self, item: FilterItem) {
         self.filter = item;
     }
 
-    pub fn and(&mut self, items: Vec<DatabaseFilterItems>) {
+    pub fn and(&mut self, items: Vec<FilterItem>) {
         self.filter.and = Some(items);
     }
 
-    pub fn or(&mut self, items: Vec<DatabaseFilterItems>) {
+    pub fn or(&mut self, items: Vec<FilterItem>) {
         self.filter.or = Some(items);
     }
 

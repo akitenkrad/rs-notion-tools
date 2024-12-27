@@ -59,6 +59,12 @@ impl Icon {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Date {
+    #[serde(default = "String::new")]
+    pub start: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Email {
     #[serde(default = "String::new")]
     pub email: String,
@@ -80,6 +86,50 @@ pub struct File {
     pub external: ExternalUrl,
     #[serde(default = "Vec::default", skip_serializing_if = "Vec::is_empty")]
     pub caption: Vec<RichText>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Formula {
+    #[serde(rename = "type", default = "String::new")]
+    pub type_name: String,
+    #[serde(default = "bool::default")]
+    pub boolean: bool,
+    #[serde(default = "String::new")]
+    pub date: String,
+    #[serde(default = "f64::default")]
+    pub number: f64,
+    #[serde(default = "String::new")]
+    pub string: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct PhoneNumber {
+    #[serde(default = "String::new")]
+    pub phone_number: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct SelectOption {
+    #[serde(default = "String::new", skip_serializing)]
+    pub id: String,
+    #[serde(default = "String::new")]
+    pub name: String,
+    #[serde(default = "Color::default", skip_serializing)]
+    pub color: Color,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Relation {
+    #[serde(default = "String::new")]
+    pub id: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct UniqueId {
+    #[serde(default = "u128::default")]
+    pub number: u128,
+    #[serde(default = "String::new")]
+    pub prefix: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
