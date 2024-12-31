@@ -50,7 +50,7 @@ pub struct Icon {
 }
 
 impl Icon {
-    pub fn from_str(emoji: &str) -> Self {
+    pub fn from_str(emoji: String) -> Self {
         let icon = Icon {
             emoji: emoji.to_string(),
         };
@@ -181,7 +181,7 @@ pub struct Parent {
 }
 
 impl Parent {
-    fn database(database_id: &str) -> Self {
+    fn database(database_id: String) -> Self {
         let parent = Parent {
             type_name: ParentType::Database,
             database_id: Some(database_id.to_string()),
@@ -192,7 +192,7 @@ impl Parent {
         return parent;
     }
 
-    fn page(page_id: &str) -> Self {
+    fn page(page_id: String) -> Self {
         let parent = Parent {
             type_name: ParentType::Page,
             database_id: None,
@@ -203,7 +203,7 @@ impl Parent {
         return parent;
     }
 
-    fn workspace(workspace_id: &str) -> Self {
+    fn workspace(workspace_id: String) -> Self {
         let parent = Parent {
             type_name: ParentType::Workspace,
             database_id: None,
@@ -214,7 +214,7 @@ impl Parent {
         return parent;
     }
 
-    fn block(block_id: &str) -> Self {
+    fn block(block_id: String) -> Self {
         let parent = Parent {
             type_name: ParentType::Block,
             database_id: None,
@@ -225,7 +225,7 @@ impl Parent {
         return parent;
     }
 
-    pub fn from(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn from(parent_type: ParentType, parent_id: String) -> Self {
         match parent_type {
             ParentType::Database => return Parent::database(parent_id),
             ParentType::Page => return Parent::page(parent_id),
@@ -305,7 +305,7 @@ impl Default for RichText {
 }
 
 impl RichText {
-    pub fn from_str(value: &str) -> Self {
+    pub fn from_str(value: String) -> Self {
         let mut text = TextObject::default();
         text.content = value.to_string();
         let annotations = AnnotationObject::default();
@@ -318,7 +318,7 @@ impl RichText {
     }
 
     pub fn from_str_with_annotations(
-        value: &str,
+        value: String,
         bold: bool,
         italic: bool,
         underline: bool,

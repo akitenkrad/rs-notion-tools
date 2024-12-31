@@ -23,8 +23,8 @@ async fn test_query_database() {
     let notion = Notion::new();
     let mut filter = QueryFilter::new();
     filter.args(FilterItem::status(
-        "Status",
-        StatusFilterItem::equals("Deep Dive"),
+        String::from("Status"),
+        StatusFilterItem::equals(String::from("Deep Dive")),
     ));
     let response = notion.query_database(filter).await;
 
@@ -49,13 +49,16 @@ async fn test_crud_a_page() {
     let mut properties: FxHashMap<String, PageProperty> = FxHashMap::default();
     properties.insert(
         "Name".to_string(),
-        PageProperty::title(RichText::from_str("Notion API Test")),
+        PageProperty::title(RichText::from_str(String::from("Notion API Test"))),
     );
     properties.insert(
         "Title".to_string(),
-        PageProperty::rich_text(vec![RichText::from_str("Notion API Test")]),
+        PageProperty::rich_text(vec![RichText::from_str(String::from("Notion API Test"))]),
     );
-    properties.insert("Status".to_string(), PageProperty::status("Ready"));
+    properties.insert(
+        "Status".to_string(),
+        PageProperty::status(String::from("Ready")),
+    );
     let mut page = Page::from_properties(properties);
     page.parent.type_name = ParentType::Database;
     page.parent.database_id = Some(notion.database_id.clone());
@@ -77,15 +80,20 @@ async fn test_crud_a_page() {
     let mut properties: FxHashMap<String, PageProperty> = FxHashMap::default();
     properties.insert(
         "Title".to_string(),
-        PageProperty::rich_text(vec![RichText::from_str("Notion API Test Updated")]),
+        PageProperty::rich_text(vec![RichText::from_str(String::from(
+            "Notion API Test Updated",
+        ))]),
     );
-    properties.insert("Status".to_string(), PageProperty::status("Deep Dive"));
+    properties.insert(
+        "Status".to_string(),
+        PageProperty::status(String::from("Deep Dive")),
+    );
     let mut page = Page::from_properties(properties);
     page.id = page_id.clone();
     page.parent.type_name = ParentType::Database;
     page.parent.database_id = Some(notion.database_id.clone());
 
-    let response = notion.update_a_page(&page_id, &page).await;
+    let response = notion.update_a_page(page_id.clone(), &page).await;
 
     match response {
         Ok(page) => {
@@ -100,7 +108,11 @@ async fn test_crud_a_page() {
 
     // Delete a page
     let response = notion
-        .archive_a_page(&page_id, &notion.database_id.clone(), ParentType::Database)
+        .archive_a_page(
+            page_id.clone(),
+            notion.database_id.clone(),
+            ParentType::Database,
+        )
         .await;
 
     match response {
@@ -124,13 +136,16 @@ async fn test_crud_blocks() {
     let mut properties: FxHashMap<String, PageProperty> = FxHashMap::default();
     properties.insert(
         "Name".to_string(),
-        PageProperty::title(RichText::from_str("Notion API Test")),
+        PageProperty::title(RichText::from_str(String::from("Notion API Test"))),
     );
     properties.insert(
         "Title".to_string(),
-        PageProperty::rich_text(vec![RichText::from_str("Notion API Test")]),
+        PageProperty::rich_text(vec![RichText::from_str(String::from("Notion API Test"))]),
     );
-    properties.insert("Status".to_string(), PageProperty::status("Ready"));
+    properties.insert(
+        "Status".to_string(),
+        PageProperty::status(String::from("Ready")),
+    );
     let mut page = Page::from_properties(properties);
     page.parent.type_name = ParentType::Database;
     page.parent.database_id = Some(notion.database_id.clone());
@@ -152,31 +167,31 @@ async fn test_crud_blocks() {
     let mut blocks: Vec<Block> = Vec::new();
     blocks.push(Block::heading_1(
         ParentType::Page,
-        &page_id,
-        vec!["Test Heading 1"],
+        page_id.clone(),
+        vec![String::from("Test Heading 1")],
     ));
     blocks.push(Block::heading_2(
         ParentType::Page,
-        &page_id,
-        vec!["Test Heading 2"],
+        page_id.clone(),
+        vec![String::from("Test Heading 2")],
     ));
     blocks.push(Block::heading_3(
         ParentType::Page,
-        &page_id,
-        vec!["Test Heading 3"],
+        page_id.clone(),
+        vec![String::from("Test Heading 3")],
     ));
     blocks.push(Block::paragraph(
         ParentType::Page,
-        &page_id,
-        vec!["Test Paragraph"],
+        page_id.clone(),
+        vec![String::from("Test Paragraph")],
     ));
     blocks.push(Block::paragraph(
         ParentType::Page,
-        &page_id,
-        vec!["Original Text"],
+        page_id.clone(),
+        vec![String::from("Original Text")],
     ));
 
-    let response = notion.append_block_children(&page_id, blocks).await;
+    let response = notion.append_block_children(page_id.clone(), blocks).await;
     let mut original_text_block_id = String::new();
     match response {
         Ok(response) => {
@@ -209,17 +224,17 @@ async fn test_crud_blocks() {
     let mut blocks: Vec<Block> = Vec::new();
     blocks.push(Block::paragraph(
         ParentType::Page,
-        &original_text_block_id,
-        vec!["Updated Text 1"],
+        original_text_block_id.clone(),
+        vec![String::from("Updated Text 1")],
     ));
     blocks.push(Block::paragraph(
         ParentType::Page,
-        &original_text_block_id,
-        vec!["Updated Text 2"],
+        original_text_block_id.clone(),
+        vec![String::from("Updated Text 2")],
     ));
 
     let response = notion
-        .append_block_children(&original_text_block_id, blocks)
+        .append_block_children(original_text_block_id.clone(), blocks)
         .await;
 
     match response {
@@ -235,7 +250,11 @@ async fn test_crud_blocks() {
 
     // Delete a page
     let response = notion
-        .archive_a_page(&page_id, &notion.database_id.clone(), ParentType::Database)
+        .archive_a_page(
+            page_id.clone(),
+            notion.database_id.clone(),
+            ParentType::Database,
+        )
         .await;
 
     match response {
@@ -259,13 +278,16 @@ async fn test_crud_blocks_many() {
     let mut properties: FxHashMap<String, PageProperty> = FxHashMap::default();
     properties.insert(
         "Name".to_string(),
-        PageProperty::title(RichText::from_str("Notion API Test")),
+        PageProperty::title(RichText::from_str(String::from("Notion API Test"))),
     );
     properties.insert(
         "Title".to_string(),
-        PageProperty::rich_text(vec![RichText::from_str("Notion API Test")]),
+        PageProperty::rich_text(vec![RichText::from_str(String::from("Notion API Test"))]),
     );
-    properties.insert("Status".to_string(), PageProperty::status("Ready"));
+    properties.insert(
+        "Status".to_string(),
+        PageProperty::status(String::from("Ready")),
+    );
     let mut page = Page::from_properties(properties);
     page.parent.type_name = ParentType::Database;
     page.parent.database_id = Some(notion.database_id.clone());
@@ -288,11 +310,11 @@ async fn test_crud_blocks_many() {
     for i in 0..500 {
         blocks.push(Block::paragraph(
             ParentType::Page,
-            &page_id,
-            vec![&format!("Test Paragraph {}", i)],
+            page_id.clone(),
+            vec![format!("Test Paragraph {}", i)],
         ));
     }
-    let response = notion.append_block_children(&page_id, blocks).await;
+    let response = notion.append_block_children(page_id.clone(), blocks).await;
     let mut original_text_block_id = String::new();
     match response {
         Ok(response) => {
@@ -325,17 +347,17 @@ async fn test_crud_blocks_many() {
     let mut blocks: Vec<Block> = Vec::new();
     blocks.push(Block::paragraph(
         ParentType::Page,
-        &original_text_block_id,
-        vec!["Updated Text 1"],
+        original_text_block_id.clone(),
+        vec![String::from("Updated Text 1")],
     ));
     blocks.push(Block::paragraph(
         ParentType::Page,
-        &original_text_block_id,
-        vec!["Updated Text 2"],
+        original_text_block_id.clone(),
+        vec![String::from("Updated Text 2")],
     ));
 
     let response = notion
-        .append_block_children(&original_text_block_id, blocks)
+        .append_block_children(original_text_block_id, blocks)
         .await;
 
     match response {
@@ -351,7 +373,11 @@ async fn test_crud_blocks_many() {
 
     // Delete a page
     let response = notion
-        .archive_a_page(&page_id, &notion.database_id.clone(), ParentType::Database)
+        .archive_a_page(
+            page_id.clone(),
+            notion.database_id.clone(),
+            ParentType::Database,
+        )
         .await;
 
     match response {

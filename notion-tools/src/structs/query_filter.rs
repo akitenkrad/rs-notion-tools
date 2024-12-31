@@ -8,7 +8,7 @@
 //! ```rust
 //! # use notion_tools::structs::query_filter::*;
 //! let mut query_filter = QueryFilter::new();
-//! query_filter.args(FilterItem::status("Status", StatusFilterItem::equals("ToDo")));
+//! query_filter.args(FilterItem::status(String::from("Status"), StatusFilterItem::equals(String::from("ToDo"))));
 //! let filter = query_filter.build();
 //! ```
 //!
@@ -18,11 +18,11 @@
 //! # use notion_tools::structs::query_filter::*;
 //! let mut query_filter = QueryFilter::new();
 //! query_filter.and(vec![
-//!    FilterItem::status("Status", StatusFilterItem::equals("Active")),
-//!    FilterItem::rich_text("Name", RichTextFilterItem::contains("Zack")),
+//!    FilterItem::status(String::from("Status"), StatusFilterItem::equals(String::from("Active"))),
+//!    FilterItem::rich_text(String::from("Name"), RichTextFilterItem::contains(String::from("Zack"))),
 //!    FilterItem::or(vec![
-//!       FilterItem::number("Age", NumberFilterItem::greater_than(18)),
-//!       FilterItem::rich_text("Address", RichTextFilterItem::contains("New York")),
+//!       FilterItem::number(String::from("Age"), NumberFilterItem::greater_than(18)),
+//!       FilterItem::rich_text(String::from("Address"), RichTextFilterItem::contains(String::from("New York"))),
 //!    ])
 //! ]);
 //! let filter = query_filter.build();
@@ -72,21 +72,21 @@ pub struct DateFilterItem {
 }
 
 impl DateFilterItem {
-    pub fn equals(value: &str) -> Self {
+    pub fn equals(value: String) -> Self {
         DateFilterItem {
             equals: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn after(value: &str) -> Self {
+    pub fn after(value: String) -> Self {
         DateFilterItem {
             after: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn before(value: &str) -> Self {
+    pub fn before(value: String) -> Self {
         DateFilterItem {
             before: Some(value.to_string()),
             ..Default::default()
@@ -107,14 +107,14 @@ impl DateFilterItem {
         }
     }
 
-    pub fn on_or_after(value: &str) -> Self {
+    pub fn on_or_after(value: String) -> Self {
         DateFilterItem {
             on_or_after: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn on_or_before(value: &str) -> Self {
+    pub fn on_or_before(value: String) -> Self {
         DateFilterItem {
             on_or_before: Some(value.to_string()),
             ..Default::default()
@@ -201,14 +201,14 @@ pub struct MultiSelectFilterItem {
 }
 
 impl MultiSelectFilterItem {
-    pub fn contains(value: &str) -> Self {
+    pub fn contains(value: String) -> Self {
         MultiSelectFilterItem {
             contains: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_contain(value: &str) -> Self {
+    pub fn does_not_contain(value: String) -> Self {
         MultiSelectFilterItem {
             does_not_contain: Some(value.to_string()),
             ..Default::default()
@@ -321,14 +321,14 @@ pub struct PeopleFilterItem {
 }
 
 impl PeopleFilterItem {
-    pub fn contains(value: &str) -> Self {
+    pub fn contains(value: String) -> Self {
         PeopleFilterItem {
             contains: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_contain(value: &str) -> Self {
+    pub fn does_not_contain(value: String) -> Self {
         PeopleFilterItem {
             does_not_contain: Some(value.to_string()),
             ..Default::default()
@@ -363,14 +363,14 @@ pub struct RelationFilterItem {
 }
 
 impl RelationFilterItem {
-    pub fn contains(value: &str) -> Self {
+    pub fn contains(value: String) -> Self {
         RelationFilterItem {
             contains: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_contain(value: &str) -> Self {
+    pub fn does_not_contain(value: String) -> Self {
         RelationFilterItem {
             does_not_contain: Some(value.to_string()),
             ..Default::default()
@@ -413,42 +413,42 @@ pub struct RichTextFilterItem {
 }
 
 impl RichTextFilterItem {
-    pub fn contains(value: &str) -> Self {
+    pub fn contains(value: String) -> Self {
         RichTextFilterItem {
             contains: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_contain(value: &str) -> Self {
+    pub fn does_not_contain(value: String) -> Self {
         RichTextFilterItem {
             does_not_contain: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn equals(value: &str) -> Self {
+    pub fn equals(value: String) -> Self {
         RichTextFilterItem {
             equals: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_equal(value: &str) -> Self {
+    pub fn does_not_equal(value: String) -> Self {
         RichTextFilterItem {
             does_not_equal: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn starts_with(value: &str) -> Self {
+    pub fn starts_with(value: String) -> Self {
         RichTextFilterItem {
             starts_with: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn ends_with(value: &str) -> Self {
+    pub fn ends_with(value: String) -> Self {
         RichTextFilterItem {
             ends_with: Some(value.to_string()),
             ..Default::default()
@@ -483,14 +483,14 @@ pub struct SelectFilterItem {
 }
 
 impl SelectFilterItem {
-    pub fn equals(value: &str) -> Self {
+    pub fn equals(value: String) -> Self {
         SelectFilterItem {
             equals: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_equals(value: &str) -> Self {
+    pub fn does_not_equals(value: String) -> Self {
         SelectFilterItem {
             does_not_equals: Some(value.to_string()),
             ..Default::default()
@@ -525,14 +525,14 @@ pub struct StatusFilterItem {
 }
 
 impl StatusFilterItem {
-    pub fn equals(value: &str) -> Self {
+    pub fn equals(value: String) -> Self {
         StatusFilterItem {
             equals: Some(value.to_string()),
             ..Default::default()
         }
     }
 
-    pub fn does_not_equals(value: &str) -> Self {
+    pub fn does_not_equals(value: String) -> Self {
         StatusFilterItem {
             does_not_equals: Some(value.to_string()),
             ..Default::default()
@@ -565,7 +565,7 @@ pub struct TimestampFilterItem {
 }
 
 impl TimestampFilterItem {
-    pub fn timestamp(value: &str) -> Self {
+    pub fn timestamp(value: String) -> Self {
         TimestampFilterItem {
             timestamp: Some(value.to_string()),
             ..Default::default()
@@ -698,7 +698,7 @@ impl FilterItem {
         }
     }
 
-    pub fn checkbox(property: &str, item: CheckboxFilterItem) -> Self {
+    pub fn checkbox(property: String, item: CheckboxFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             checkbox: Some(item),
@@ -706,7 +706,7 @@ impl FilterItem {
         }
     }
 
-    pub fn date(property: &str, item: DateFilterItem) -> Self {
+    pub fn date(property: String, item: DateFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             date: Some(item),
@@ -714,7 +714,7 @@ impl FilterItem {
         }
     }
 
-    pub fn files(property: &str, item: FilesFilterItem) -> Self {
+    pub fn files(property: String, item: FilesFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             files: Some(item),
@@ -722,7 +722,7 @@ impl FilterItem {
         }
     }
 
-    pub fn formula(property: &str, item: FormulaFilterItem) -> Self {
+    pub fn formula(property: String, item: FormulaFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             formula: Some(item),
@@ -730,7 +730,7 @@ impl FilterItem {
         }
     }
 
-    pub fn multi_select(property: &str, item: MultiSelectFilterItem) -> Self {
+    pub fn multi_select(property: String, item: MultiSelectFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             multi_select: Some(item),
@@ -738,7 +738,7 @@ impl FilterItem {
         }
     }
 
-    pub fn number(property: &str, item: NumberFilterItem) -> Self {
+    pub fn number(property: String, item: NumberFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             number: Some(item),
@@ -746,7 +746,7 @@ impl FilterItem {
         }
     }
 
-    pub fn people(property: &str, item: PeopleFilterItem) -> Self {
+    pub fn people(property: String, item: PeopleFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             people: Some(item),
@@ -754,7 +754,7 @@ impl FilterItem {
         }
     }
 
-    pub fn relation(property: &str, item: RelationFilterItem) -> Self {
+    pub fn relation(property: String, item: RelationFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             relation: Some(item),
@@ -762,7 +762,7 @@ impl FilterItem {
         }
     }
 
-    pub fn rich_text(property: &str, item: RichTextFilterItem) -> Self {
+    pub fn rich_text(property: String, item: RichTextFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             rich_text: Some(item),
@@ -770,7 +770,7 @@ impl FilterItem {
         }
     }
 
-    pub fn select(property: &str, item: SelectFilterItem) -> Self {
+    pub fn select(property: String, item: SelectFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             select: Some(item),
@@ -778,7 +778,7 @@ impl FilterItem {
         }
     }
 
-    pub fn status(property: &str, item: StatusFilterItem) -> Self {
+    pub fn status(property: String, item: StatusFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             status: Some(item),
@@ -786,7 +786,7 @@ impl FilterItem {
         }
     }
 
-    pub fn timestamp(property: &str, item: TimestampFilterItem) -> Self {
+    pub fn timestamp(property: String, item: TimestampFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             timestamp: Some(item),
@@ -794,7 +794,7 @@ impl FilterItem {
         }
     }
 
-    pub fn id(property: &str, item: IdFilterItem) -> Self {
+    pub fn id(property: String, item: IdFilterItem) -> Self {
         FilterItem {
             property: property.to_string(),
             id: Some(item),

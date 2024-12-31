@@ -320,7 +320,12 @@ impl Default for Block {
 }
 
 impl Block {
-    pub fn bookmark(parent_type: ParentType, parent_id: &str, caption: &str, url: &str) -> Self {
+    pub fn bookmark(
+        parent_type: ParentType,
+        parent_id: String,
+        caption: String,
+        url: String,
+    ) -> Self {
         let bookmark = Bookmark {
             caption: vec![RichText::from_str(caption)],
             url: url.to_string(),
@@ -334,7 +339,7 @@ impl Block {
         return block;
     }
 
-    pub fn breadcrumb(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn breadcrumb(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "breadcrumb".to_string(),
@@ -344,10 +349,14 @@ impl Block {
         return block;
     }
 
-    pub fn bulleted_list_item(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn bulleted_list_item(
+        parent_type: ParentType,
+        parent_id: String,
+        texts: Vec<String>,
+    ) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let bulleted_list_item = BulletedListItem {
             rich_text: texts,
@@ -364,8 +373,8 @@ impl Block {
 
     pub fn callout(
         parent_type: ParentType,
-        parent_id: &str,
-        text: &str,
+        parent_id: String,
+        text: String,
         icon: Icon,
         color: Color,
     ) -> Self {
@@ -384,7 +393,7 @@ impl Block {
         return block;
     }
 
-    pub fn child_database(parent_type: ParentType, parent_id: &str, title: &str) -> Self {
+    pub fn child_database(parent_type: ParentType, parent_id: String, title: String) -> Self {
         let child_database = ChildDatabase {
             title: title.to_string(),
         };
@@ -397,7 +406,7 @@ impl Block {
         return block;
     }
 
-    pub fn child_page(parent_type: ParentType, parent_id: &str, title: &str) -> Self {
+    pub fn child_page(parent_type: ParentType, parent_id: String, title: String) -> Self {
         let child_page = ChildPage {
             title: title.to_string(),
         };
@@ -412,15 +421,15 @@ impl Block {
 
     pub fn code(
         parent_type: ParentType,
-        parent_id: &str,
-        caption: &str,
-        language: &str,
-        texts: Vec<&str>,
+        parent_id: String,
+        caption: String,
+        language: String,
+        texts: Vec<String>,
     ) -> Self {
         let caption = vec![RichText::from_str(caption)];
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let code = Code {
             caption: caption,
@@ -436,7 +445,7 @@ impl Block {
         return block;
     }
 
-    pub fn column_list(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn column_list(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "column_list".to_string(),
@@ -446,7 +455,7 @@ impl Block {
         return block;
     }
 
-    pub fn column(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn column(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "column".to_string(),
@@ -456,7 +465,7 @@ impl Block {
         return block;
     }
 
-    pub fn divider(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn divider(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "divider".to_string(),
@@ -466,7 +475,7 @@ impl Block {
         return block;
     }
 
-    pub fn embed(parent_type: ParentType, parent_id: &str, url: &str) -> Self {
+    pub fn embed(parent_type: ParentType, parent_id: String, url: String) -> Self {
         let embed = Embed {
             url: url.to_string(),
         };
@@ -479,7 +488,7 @@ impl Block {
         return block;
     }
 
-    pub fn equation(parent_type: ParentType, parent_id: &str, expression: &str) -> Self {
+    pub fn equation(parent_type: ParentType, parent_id: String, expression: String) -> Self {
         let equation = Equation {
             expression: expression.to_string(),
         };
@@ -492,7 +501,7 @@ impl Block {
         return block;
     }
 
-    pub fn file(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn file(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "file".to_string(),
@@ -502,10 +511,10 @@ impl Block {
         return block;
     }
 
-    pub fn heading_1(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn heading_1(parent_type: ParentType, parent_id: String, texts: Vec<String>) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let heading = Heading {
             rich_text: texts,
@@ -520,10 +529,10 @@ impl Block {
         return block;
     }
 
-    pub fn heading_2(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn heading_2(parent_type: ParentType, parent_id: String, texts: Vec<String>) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let heading = Heading {
             rich_text: texts,
@@ -538,10 +547,10 @@ impl Block {
         return block;
     }
 
-    pub fn heading_3(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn heading_3(parent_type: ParentType, parent_id: String, texts: Vec<String>) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let heading = Heading {
             rich_text: texts,
@@ -556,7 +565,7 @@ impl Block {
         return block;
     }
 
-    pub fn image(parent_type: ParentType, parent_id: &str, url: &str) -> Self {
+    pub fn image(parent_type: ParentType, parent_id: String, url: String) -> Self {
         let external = ExternalUrl {
             url: url.to_string(),
         };
@@ -573,7 +582,7 @@ impl Block {
         return block;
     }
 
-    pub fn link_preview(parent_type: ParentType, parent_id: &str, url: &str) -> Self {
+    pub fn link_preview(parent_type: ParentType, parent_id: String, url: String) -> Self {
         let link_preview = LinkPreview {
             url: url.to_string(),
         };
@@ -586,10 +595,14 @@ impl Block {
         return block;
     }
 
-    pub fn numbered_list_item(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn numbered_list_item(
+        parent_type: ParentType,
+        parent_id: String,
+        texts: Vec<String>,
+    ) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let numbered_list_item = NumberedListItem {
             rich_text: texts,
@@ -604,10 +617,10 @@ impl Block {
         return block;
     }
 
-    pub fn paragraph(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn paragraph(parent_type: ParentType, parent_id: String, texts: Vec<String>) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let paragraph = Paragraph {
             rich_text: texts,
@@ -622,7 +635,7 @@ impl Block {
         return block;
     }
 
-    pub fn pdf(parent_type: ParentType, parent_id: &str, url: &str) -> Self {
+    pub fn pdf(parent_type: ParentType, parent_id: String, url: String) -> Self {
         let external = ExternalUrl {
             url: url.to_string(),
         };
@@ -639,10 +652,10 @@ impl Block {
         return block;
     }
 
-    pub fn quote(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn quote(parent_type: ParentType, parent_id: String, texts: Vec<String>) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let quote = Quote {
             rich_text: texts,
@@ -657,7 +670,7 @@ impl Block {
         return block;
     }
 
-    pub fn table(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn table(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "table".to_string(),
@@ -667,10 +680,10 @@ impl Block {
         return block;
     }
 
-    pub fn table_row(parent_type: ParentType, parent_id: &str, cells: Vec<&str>) -> Self {
+    pub fn table_row(parent_type: ParentType, parent_id: String, cells: Vec<String>) -> Self {
         let cells = cells
             .iter()
-            .map(|cell| RichText::from_str(cell))
+            .map(|cell| RichText::from_str(cell.to_string()))
             .collect::<Vec<RichText>>();
         let table_row = TableRow { cells: cells };
         let block = Block {
@@ -682,7 +695,7 @@ impl Block {
         return block;
     }
 
-    pub fn table_of_contents(parent_type: ParentType, parent_id: &str) -> Self {
+    pub fn table_of_contents(parent_type: ParentType, parent_id: String) -> Self {
         let block = Block {
             parent: Parent::from(parent_type, parent_id),
             type_name: "table_of_contents".to_string(),
@@ -694,13 +707,13 @@ impl Block {
 
     pub fn to_do(
         parent_type: ParentType,
-        parent_id: &str,
-        texts: Vec<&str>,
+        parent_id: String,
+        texts: Vec<String>,
         checked: bool,
     ) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let to_do = ToDo {
             rich_text: texts,
@@ -716,10 +729,10 @@ impl Block {
         return block;
     }
 
-    pub fn toggle_blocks(parent_type: ParentType, parent_id: &str, texts: Vec<&str>) -> Self {
+    pub fn toggle_blocks(parent_type: ParentType, parent_id: String, texts: Vec<String>) -> Self {
         let texts = texts
             .iter()
-            .map(|text| RichText::from_str(text))
+            .map(|text| RichText::from_str(text.to_string()))
             .collect::<Vec<RichText>>();
         let toggle = ToggleBlock {
             rich_text: texts,
@@ -734,7 +747,7 @@ impl Block {
         return block;
     }
 
-    pub fn video(parent_type: ParentType, parent_id: &str, url: &str) -> Self {
+    pub fn video(parent_type: ParentType, parent_id: String, url: String) -> Self {
         let external = ExternalUrl {
             url: url.to_string(),
         };

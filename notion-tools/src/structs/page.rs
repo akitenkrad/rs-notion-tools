@@ -83,7 +83,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn date(value: &str) -> Self {
+    pub fn date(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "date".to_string();
         prop.date = Some(Date {
@@ -92,7 +92,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn email(value: &str) -> Self {
+    pub fn email(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "email".to_string();
         prop.email = Some(Email {
@@ -101,7 +101,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn multi_select(value: Vec<&str>) -> Self {
+    pub fn multi_select(value: Vec<String>) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "multi_select".to_string();
         let mut options = Vec::new();
@@ -123,7 +123,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn phone_number(value: &str) -> Self {
+    pub fn phone_number(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "phone_number".to_string();
         prop.phone_number = Some(PhoneNumber {
@@ -132,7 +132,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn relation(value: Vec<&str>) -> Self {
+    pub fn relation(value: Vec<String>) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "relation".to_string();
         let mut relations = Vec::new();
@@ -150,7 +150,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn select(value: &str) -> Self {
+    pub fn select(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "select".to_string();
         prop.select = Some(SelectOption {
@@ -161,7 +161,7 @@ impl PageProperty {
         return prop;
     }
 
-    pub fn status(value: &str) -> Self {
+    pub fn status(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "status".to_string();
         prop.status = Some(SelectOption {
@@ -177,7 +177,7 @@ impl PageProperty {
         prop.title = Some(vec![value]);
         return prop;
     }
-    pub fn url(value: &str) -> Self {
+    pub fn url(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "url".to_string();
         prop.url = Some(value.to_string());

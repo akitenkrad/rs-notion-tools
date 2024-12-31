@@ -58,14 +58,14 @@
 //! // Create a page
 //! let mut properties: FxHashMap<String, PageProperty> = FxHashMap::default();
 //! properties.insert(
-//!     "Name".to_string(),
-//!     PageProperty::title(RichText::from_str("Sample Page")),
+//!     String::from("Name"),
+//!     PageProperty::title(RichText::from_str(String::from("Sample Page"))),
 //! );
 //! properties.insert(
-//!     "Title".to_string(),
-//!     PageProperty::rich_text(vec![RichText::from_str("Sample Page")]),
+//!     String::from("Title"),
+//!     PageProperty::rich_text(vec![RichText::from_str(String::from("Sample Page"))]),
 //! );
-//! properties.insert("Status".to_string(), PageProperty::status("ToDo"));
+//! properties.insert(String::from("Status"), PageProperty::status(String::from("ToDo")));
 //! let mut page = Page::from_properties(properties);
 //! page.parent.type_name = ParentType::Database;
 //! page.parent.database_id = Some(notion.database_id.clone());
@@ -88,13 +88,13 @@
 //! # #[tokio::main]
 //! # async fn main() -> Result<()> {
 //! let mut notion = Notion::new();
-//! notion.database("your_database_id");
+//! notion.database(String::from("your_database_id"));
 //!
 //! // Build a query filter
 //! let mut filter = QueryFilter::new();
 //! filter.args(FilterItem::status(
-//!     "Status",
-//!     StatusFilterItem::equals("ToDo"),
+//!     String::from("Status"),
+//!     StatusFilterItem::equals(String::from("ToDo")),
 //! ));
 //! // Query a database
 //! let response = notion.query_database(filter).await?;
@@ -138,7 +138,7 @@ impl Notion {
     }
 
     /// Set your database ID
-    pub fn database(&mut self, database_id: &str) -> &mut Self {
+    pub fn database(&mut self, database_id: String) -> &mut Self {
         self.database_id = database_id.to_string();
         return self;
     }
@@ -227,11 +227,11 @@ impl Notion {
 
     /// # Update a page
     /// ## Arguments:
-    /// - page_id: &str
+    /// - page_id: String
     /// - page: [`Page`] struct
     /// ## Return:
     /// - [`Page`] struct
-    pub async fn update_a_page(&self, page_id: &str, page: &Page) -> Result<Page> {
+    pub async fn update_a_page(&self, page_id: String, page: &Page) -> Result<Page> {
         let url = format!("https://api.notion.com/v1/pages/{}", page_id);
         let client = request::Client::new();
         let data = serde_json::to_string(page)?;
@@ -255,8 +255,8 @@ impl Notion {
 
     /// # Archive a page
     /// ## Arguments:
-    /// - page_id: &str
-    /// - parent_id: &str
+    /// - page_id: String
+    /// - parent_id: String
     /// - parent_type: [`ParentType`]
     /// ## Return:
     /// - [`Page`] struct
@@ -264,8 +264,8 @@ impl Notion {
     /// - The page will be archived by updating the page with the `archived` field set to `true`.
     pub async fn archive_a_page(
         &self,
-        page_id: &str,
-        parent_id: &str,
+        page_id: String,
+        parent_id: String,
         parent_type: ParentType,
     ) -> Result<Page> {
         let mut page = Page {
@@ -299,13 +299,13 @@ impl Notion {
     /// Because the Notion API only allows appending 100 blocks at a time, this method will split the
     /// blocks into chunks of 100 and append them to the parent block.
     /// ## Arguments:
-    /// - parent_id: &str
+    /// - parent_id: String
     /// - blocks: [`BlockBody`]
     /// ## Return:
     /// - [`BlockResponse`] struct
     pub async fn append_block_children(
         &self,
-        parent_id: &str,
+        parent_id: String,
         blocks: Vec<Block>,
     ) -> Result<BlockResponse> {
         let url = format!("https://api.notion.com/v1/blocks/{}/children", parent_id);
