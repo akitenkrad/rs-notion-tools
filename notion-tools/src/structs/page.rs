@@ -78,12 +78,14 @@ pub struct PageProperty {
 impl PageProperty {
     pub fn checkbox(value: bool) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "checkbox".to_string();
         prop.checkbox = Some(value);
         return prop;
     }
 
     pub fn date(value: &str) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "date".to_string();
         prop.date = Some(Date {
             start: value.to_string(),
         });
@@ -92,6 +94,7 @@ impl PageProperty {
 
     pub fn email(value: &str) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "email".to_string();
         prop.email = Some(Email {
             email: value.to_string(),
         });
@@ -100,6 +103,7 @@ impl PageProperty {
 
     pub fn multi_select(value: Vec<&str>) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "multi_select".to_string();
         let mut options = Vec::new();
         value.iter().for_each(|v| {
             options.push(SelectOption {
@@ -114,12 +118,14 @@ impl PageProperty {
 
     pub fn number(value: f64) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "number".to_string();
         prop.number = Some(value);
         return prop;
     }
 
     pub fn phone_number(value: &str) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "phone_number".to_string();
         prop.phone_number = Some(PhoneNumber {
             phone_number: value.to_string(),
         });
@@ -128,6 +134,7 @@ impl PageProperty {
 
     pub fn relation(value: Vec<&str>) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "relation".to_string();
         let mut relations = Vec::new();
         value.iter().for_each(|v| {
             relations.push(Relation { id: v.to_string() });
@@ -138,12 +145,14 @@ impl PageProperty {
 
     pub fn rich_text(value: Vec<RichText>) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "rich_text".to_string();
         prop.rich_text = Some(value);
         return prop;
     }
 
     pub fn select(value: &str) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "select".to_string();
         prop.select = Some(SelectOption {
             id: "".to_string(),
             name: value.to_string(),
@@ -154,6 +163,7 @@ impl PageProperty {
 
     pub fn status(value: &str) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "status".to_string();
         prop.status = Some(SelectOption {
             id: "".to_string(),
             name: value.to_string(),
@@ -163,13 +173,98 @@ impl PageProperty {
     }
     pub fn title(value: RichText) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "title".to_string();
         prop.title = Some(vec![value]);
         return prop;
     }
     pub fn url(value: &str) -> Self {
         let mut prop = PageProperty::default();
+        prop.type_name = "url".to_string();
         prop.url = Some(value.to_string());
         return prop;
+    }
+
+    pub fn get_value(&self) -> String {
+        match &self.type_name[..] {
+            "checkbox" => {
+                if let Some(value) = &self.checkbox {
+                    return value.to_string();
+                }
+            }
+            "date" => {
+                if let Some(value) = &self.date {
+                    return value.start.to_string();
+                }
+            }
+            "email" => {
+                if let Some(value) = &self.email {
+                    return value.email.to_string();
+                }
+            }
+            "multi_select" => {
+                if let Some(value) = &self.multi_select {
+                    let mut values = Vec::new();
+                    value.iter().for_each(|v| {
+                        values.push(v.name.to_string());
+                    });
+                    return values.join(", ");
+                }
+            }
+            "number" => {
+                if let Some(value) = &self.number {
+                    return value.to_string();
+                }
+            }
+            "phone_number" => {
+                if let Some(value) = &self.phone_number {
+                    return value.phone_number.to_string();
+                }
+            }
+            "relation" => {
+                if let Some(value) = &self.relation {
+                    let mut values = Vec::new();
+                    value.iter().for_each(|v| {
+                        values.push(v.id.to_string());
+                    });
+                    return values.join(", ");
+                }
+            }
+            "rich_text" => {
+                if let Some(value) = &self.rich_text {
+                    let mut values = Vec::new();
+                    value.iter().for_each(|v| {
+                        values.push(v.plain_text.to_string());
+                    });
+                    return values.join(", ");
+                }
+            }
+            "select" => {
+                if let Some(value) = &self.select {
+                    return value.name.to_string();
+                }
+            }
+            "status" => {
+                if let Some(value) = &self.status {
+                    return value.name.to_string();
+                }
+            }
+            "title" => {
+                if let Some(value) = &self.title {
+                    let mut values = Vec::new();
+                    value.iter().for_each(|v| {
+                        values.push(v.plain_text.to_string());
+                    });
+                    return values.join(", ");
+                }
+            }
+            "url" => {
+                if let Some(value) = &self.url {
+                    return value.to_string();
+                }
+            }
+            _ => {}
+        }
+        return "".to_string();
     }
 }
 
