@@ -346,12 +346,18 @@ impl Page {
 pub struct PageResponse {
     #[serde(default = "String::new")]
     pub object: String,
-    #[serde(default = "u32::default", skip_serializing)]
+    #[serde(rename = "type", default = "String::new")]
+    pub type_name: String,
+    #[serde(default = "u32::default")]
     pub status: u32,
-    #[serde(default = "String::new", skip_serializing)]
+    #[serde(default = "String::new")]
     pub code: String,
-    #[serde(default = "String::new", skip_serializing)]
+    #[serde(default = "String::new")]
     pub message: String,
     #[serde(default = "Vec::new")]
     pub results: Vec<Page>,
+    #[serde(default = "bool::default")]
+    pub has_more: bool,
+    #[serde(default = "String::new")]
+    pub next_cursor: String,
 }

@@ -110,7 +110,7 @@ use crate::structs::common::*;
 use crate::structs::database::*;
 use crate::structs::page::*;
 use crate::structs::query_filter::*;
-use anyhow::Result;
+use anyhow::{Error, Result};
 use dotenvy::dotenv;
 use reqwest as request;
 
@@ -179,16 +179,29 @@ impl Notion {
         );
         let query = filter.build();
         let client = request::Client::new();
-        let content = client
+        let content = match client
             .post(&url)
             .header("Content-Type", "application/json")
             .header("Authorization", format!("Bearer {}", self.api_key))
             .header("Notion-Version", "2022-06-28")
             .body(query)
             .send()
-            .await?
-            .text()
-            .await?;
+            .await
+        {
+            Ok(res) => match res.text().await {
+                Ok(text) => text,
+                Err(e) => {
+                    return Err(Error::msg(
+                        format!("Failed to read response text: {}", e.to_string()).to_string(),
+                    ));
+                }
+            },
+            Err(e) => {
+                return Err(Error::msg(
+                    format!("Failed to send request: {}", e.to_string()).to_string(),
+                ));
+            }
+        };
 
         let mut response = serde_json::from_str::<PageResponse>(&content)?;
         if response.status == 0 {

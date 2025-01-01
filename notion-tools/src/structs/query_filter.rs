@@ -2,19 +2,22 @@
 //!
 //! ## Build a query filter
 //!
-//! - Simple filter
+//! ### Simple filter
 //! A simple filter is a filter that has only one condition, `Status=="ToDo"`.
 //!
 //! ```rust
+//! # fn main() {
 //! # use notion_tools::structs::query_filter::*;
 //! let mut query_filter = QueryFilter::new();
 //! query_filter.args(FilterItem::status(String::from("Status"), StatusFilterItem::equals(String::from("ToDo"))));
 //! let filter = query_filter.build();
+//! # }
 //! ```
 //!
-//! - Use `and` and `or` to combine multiple filters
+//! ### Use `and` and `or` to combine multiple filters
 //!
 //! ```rust
+//! # fn main() {
 //! # use notion_tools::structs::query_filter::*;
 //! let mut query_filter = QueryFilter::new();
 //! query_filter.and(vec![
@@ -26,7 +29,45 @@
 //!    ])
 //! ]);
 //! let filter = query_filter.build();
+//! # }
 //! ```
+//!
+//! ### Pagenation
+//!
+//! ```rust
+//! # use notion_tools::Notion;
+//! # use notion_tools::structs::query_filter::{QueryFilter, StatusFilterItem, FilterItem};
+//! # #[tokio::main]
+//! # async fn main() {
+//! let notion = Notion::new();
+//! let mut filter = QueryFilter::new();
+//! filter.args(FilterItem::status(
+//!     String::from("Status"),
+//!     StatusFilterItem::is_not_empty(),
+//! ));
+//!
+//! let mut has_more = true;
+//!
+//! while has_more {
+//!     let response = notion.query_database(filter.clone()).await;
+//!
+//!     match response {
+//!         Ok(response) => {
+//!             has_more = response.has_more;
+//!             filter.start_cursor = response.next_cursor;
+//!             for result in response.results {
+//!                // Do something with the result
+//!             }
+//!         }
+//!         Err(e) => {
+//!             println!("{:?}", e);
+//!         }
+//!     }
+//!     # has_more = false;
+//! }
+//! # }
+//! ```
+//!
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
@@ -806,12 +847,15 @@ impl FilterItem {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct QueryFilter {
     pub filter: FilterItem,
+    #[serde(default = "String::new", skip_serializing_if = "String::is_empty")]
+    pub start_cursor: String,
 }
 
 impl QueryFilter {
     pub fn new() -> Self {
         QueryFilter {
             filter: FilterItem::default(),
+            start_cursor: String::new(),
         }
     }
 
