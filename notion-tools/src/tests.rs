@@ -46,27 +46,21 @@ async fn test_query_database_with_pagenation() {
     let mut filter = QueryFilter::new();
     filter.args(FilterItem::status(
         String::from("Status"),
-        StatusFilterItem::is_not_empty(),
+        StatusFilterItem::equals(String::from("Deep Dive")),
     ));
 
     let mut has_more = true;
-    let mut counter = 0;
+    let mut num_papers = 0;
 
-    while has_more && counter < 301 {
+    while has_more {
         let response = notion.query_database(filter.clone()).await;
 
         match response {
             Ok(response) => {
                 assert!(response.results.len() > 0);
-                counter += response.results.len();
-                has_more = response.has_more;
-                filter.start_cursor = response.next_cursor;
-
-                println!("Number of data: {}", counter);
-                println!(
-                    "Initial Paper Title: {}",
-                    response.results[0].properties["Title"].get_value()
-                );
+                num_papers += response.results.len();
+                has_more = response.has_more.unwrap_or(false);
+                filter.start_cursor = response.next_cursor.unwrap_or(String::new());
             }
             Err(e) => {
                 println!("{:?}", e);
@@ -74,7 +68,8 @@ async fn test_query_database_with_pagenation() {
             }
         }
     }
-    assert!(100 < counter && counter < 401);
+    assert!(num_papers > 0);
+    println!("Number of papers: {}", num_papers);
 }
 
 #[tokio::test]

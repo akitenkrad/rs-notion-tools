@@ -53,8 +53,8 @@
 //!
 //!     match response {
 //!         Ok(response) => {
-//!             has_more = response.has_more;
-//!             filter.start_cursor = response.next_cursor;
+//!             has_more = response.has_more.unwrap_or(false);
+//!             filter.start_cursor = response.next_cursor.unwrap_or(String::new());
 //!             for result in response.results {
 //!                // Do something with the result
 //!             }

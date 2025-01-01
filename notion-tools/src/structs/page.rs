@@ -346,8 +346,8 @@ impl Page {
 pub struct PageResponse {
     #[serde(default = "String::new")]
     pub object: String,
-    #[serde(rename = "type", default = "String::new")]
-    pub type_name: String,
+    #[serde(rename = "type", default = "Option::default")]
+    pub type_name: Option<String>,
     #[serde(default = "u32::default")]
     pub status: u32,
     #[serde(default = "String::new")]
@@ -356,8 +356,8 @@ pub struct PageResponse {
     pub message: String,
     #[serde(default = "Vec::new")]
     pub results: Vec<Page>,
-    #[serde(default = "bool::default")]
-    pub has_more: bool,
-    #[serde(default = "String::new")]
-    pub next_cursor: String,
+    #[serde(default = "Option::default")]
+    pub has_more: Option<bool>,
+    #[serde(default = "Option::default")]
+    pub next_cursor: Option<String>,
 }
