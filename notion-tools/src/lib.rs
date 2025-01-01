@@ -89,6 +89,7 @@
 //! # async fn main() -> Result<()> {
 //! let mut notion = Notion::new();
 //! notion.database(String::from("your_database_id"));
+//! # notion.database(std::env::var("NOTION_DATABASE_ID").unwrap());
 //!
 //! // Build a query filter
 //! let mut filter = QueryFilter::new();
@@ -179,35 +180,25 @@ impl Notion {
         );
         let query = filter.build();
         let client = request::Client::new();
-        let content = match client
+        let content = client
             .post(&url)
             .header("Content-Type", "application/json")
             .header("Authorization", format!("Bearer {}", self.api_key))
             .header("Notion-Version", "2022-06-28")
             .body(query)
             .send()
-            .await
-        {
-            Ok(res) => match res.text().await {
-                Ok(text) => text,
-                Err(e) => {
-                    return Err(Error::msg(
-                        format!("Failed to read response text: {}", e.to_string()).to_string(),
-                    ));
-                }
-            },
-            Err(e) => {
-                return Err(Error::msg(
-                    format!("Failed to send request: {}", e.to_string()).to_string(),
-                ));
-            }
-        };
+            .await?
+            .text()
+            .await?;
 
         let mut response = serde_json::from_str::<PageResponse>(&content)?;
-        if response.status == 0 {
+        if response.status != 0 {
+            return Err(Error::msg(
+                format!("Failed to query database: {}", response.message).to_string(),
+            ));
+        } else {
             response.status = 200;
         }
-
         return Ok(response);
     }
 
@@ -232,7 +223,11 @@ impl Notion {
             .await?;
 
         let mut page = serde_json::from_str::<Page>(&content)?;
-        if page.status == 0 {
+        if page.status != 0 {
+            return Err(Error::msg(
+                format!("Failed to create page: {}", page.message).to_string(),
+            ));
+        } else {
             page.status = 200;
         }
         return Ok(page);
@@ -260,7 +255,11 @@ impl Notion {
             .await?;
 
         let mut page = serde_json::from_str::<Page>(&content)?;
-        if page.status == 0 {
+        if page.status != 0 {
+            return Err(Error::msg(
+                format!("Failed to update page: {}", page.message).to_string(),
+            ));
+        } else {
             page.status = 200;
         }
         return Ok(page);
@@ -342,7 +341,14 @@ impl Notion {
                 .text()
                 .await?;
             let _bby = serde_json::from_str::<BlockResponse>(&content)?;
-            res_blocks.extend(_bby.results);
+
+            if _bby.status != 0 {
+                return Err(Error::msg(
+                    format!("Failed to append block children: {}", _bby.message).to_string(),
+                ));
+            } else {
+                res_blocks.extend(_bby.results);
+            }
         }
 
         let res_block = BlockResponse {
