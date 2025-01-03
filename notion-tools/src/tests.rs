@@ -91,6 +91,11 @@ async fn test_crud_a_page() {
         "Status".to_string(),
         PageProperty::status(String::from("Ready")),
     );
+    properties.insert(
+        "Journal".to_string(),
+        PageProperty::select(String::from("Option,1")), // Check if the comma is handled correctly
+    );
+
     let mut page = Page::from_properties(properties);
     page.parent.type_name = ParentType::Database;
     page.parent.database_id = Some(notion.database_id.clone());
@@ -120,6 +125,11 @@ async fn test_crud_a_page() {
         "Status".to_string(),
         PageProperty::status(String::from("Deep Dive")),
     );
+    properties.insert(
+        "Journal".to_string(),
+        PageProperty::select(String::from("Option,3")), // Check if the comma is handled correctly
+    );
+
     let mut page = Page::from_properties(properties);
     page.id = page_id.clone();
     page.parent.type_name = ParentType::Database;

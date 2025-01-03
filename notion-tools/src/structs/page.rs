@@ -106,11 +106,7 @@ impl PageProperty {
         prop.type_name = "multi_select".to_string();
         let mut options = Vec::new();
         value.iter().for_each(|v| {
-            options.push(SelectOption {
-                id: "".to_string(),
-                name: v.to_string(),
-                color: Color::Default,
-            });
+            options.push(SelectOption::new(v.to_string(), Color::Default));
         });
         prop.multi_select = Some(options);
         return prop;
@@ -153,22 +149,14 @@ impl PageProperty {
     pub fn select(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "select".to_string();
-        prop.select = Some(SelectOption {
-            id: "".to_string(),
-            name: value.to_string(),
-            color: Color::Default,
-        });
+        prop.select = Some(SelectOption::new(value.to_string(), Color::Default));
         return prop;
     }
 
     pub fn status(value: String) -> Self {
         let mut prop = PageProperty::default();
         prop.type_name = "status".to_string();
-        prop.status = Some(SelectOption {
-            id: "".to_string(),
-            name: value.to_string(),
-            color: Color::Default,
-        });
+        prop.status = Some(SelectOption::new(value.to_string(), Color::Default));
         return prop;
     }
     pub fn title(value: RichText) -> Self {

@@ -118,6 +118,18 @@ pub struct SelectOption {
     pub color: Color,
 }
 
+impl SelectOption {
+    pub fn new(name: String, color: Color) -> Self {
+        let name = name.replace(",", " ");
+        let option = SelectOption {
+            id: "".to_string(),
+            name: name.to_string(),
+            color,
+        };
+        return option;
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct Relation {
     #[serde(default = "String::new")]
