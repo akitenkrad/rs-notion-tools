@@ -24,8 +24,8 @@ pub struct BulletedListItem {
 pub struct Callout {
     #[serde(default = "Vec::default")]
     pub rich_text: Vec<RichText>,
-    #[serde(default = "Icon::default")]
-    pub icon: Icon,
+    #[serde(default = "Option::default")]
+    pub icon: Option<Icon>,
     #[serde(default = "Color::default")]
     pub color: Color,
 }
@@ -381,7 +381,7 @@ impl Block {
         let rich_text = vec![RichText::from_str(text)];
         let callout = Callout {
             rich_text: rich_text,
-            icon: icon,
+            icon: Some(icon),
             color: color,
         };
         let block = Block {

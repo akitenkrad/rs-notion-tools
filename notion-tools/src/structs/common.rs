@@ -140,8 +140,8 @@ pub struct Relation {
 pub struct UniqueId {
     #[serde(default = "u128::default")]
     pub number: u128,
-    #[serde(default = "String::new")]
-    pub prefix: String,
+    #[serde(default = "Option::default")]
+    pub prefix: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
