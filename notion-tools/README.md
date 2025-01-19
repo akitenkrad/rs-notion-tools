@@ -26,7 +26,7 @@ is optional and can be set later using the `database` method.
 | [Update a block](https://developers.notion.com/reference/update-a-block) | - |
 | [Delete a block](https://developers.notion.com/reference/delete-a-block) | - |
 | [Create a page](https://developers.notion.com/reference/post-page) | ✅ |
-| [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page) | - |
+| [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page) | ✅ |
 | [Retrieve a page property item](https://developers.notion.com/reference/retrieve-a-page-property-item) | - |
 | [Update page properties](https://developers.notion.com/reference/patch-page) | ✅ |
 | [Archive a page](https://developers.notion.com/reference/archive-a-page) | ✅ |

@@ -20,7 +20,7 @@
 //! | [Update a block](https://developers.notion.com/reference/update-a-block) | - | |
 //! | [Delete a block](https://developers.notion.com/reference/delete-a-block) | - | |
 //! | [Create a page](https://developers.notion.com/reference/post-page) | ✅ | [`Notion::create_a_page`](Notion) |
-//! | [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page) | - | |
+//! | [Retrieve a page](https://developers.notion.com/reference/retrieve-a-page) | ✅ | [`Notion::retrieve_a_page`](Notion) |
 //! | [Retrieve a page property item](https://developers.notion.com/reference/retrieve-a-page-property-item) | - | |
 //! | [Update page properties](https://developers.notion.com/reference/patch-page) | ✅ | [`Notion::update_a_page`](Notion) |
 //! | [Archive a page](https://developers.notion.com/reference/archive-a-page) | ✅ | [`Notion::archive_a_page`](Notion) |
@@ -200,6 +200,30 @@ impl Notion {
             response.status = 200;
         }
         return Ok(response);
+    }
+
+    /// # Retrieve a page
+    /// ## Return
+    /// - [`Page`] struct
+    pub async fn retrieve_a_page(&self, page_id: String) -> Result<Page> {
+        let url = format!("https://api.notion.com/v1/pages/{}", page_id);
+        let client = request::Client::new();
+        let content = client
+            .get(&url)
+            .header("Content-Type", "application/json")
+            .header("Authorization", format!("Bearer {}", self.api_key))
+            .header("Notion-Version", "2022-06-28")
+            .send()
+            .await?
+            .text()
+            .await?;
+
+        let mut page = serde_json::from_str::<Page>(&content)?;
+        if page.status == 0 {
+            page.status = 200;
+        }
+
+        return Ok(page);
     }
 
     /// # Create a page
